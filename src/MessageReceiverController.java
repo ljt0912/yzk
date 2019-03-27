@@ -2,9 +2,9 @@ package org.fkjava.weixin.controller;
 
 import javax.xml.bind.JAXB;
 
-//import org.fkjava.weixin.domain.InMessage;
-//import org.fkjava.weixin.service.MessageService;
-//import org.fkjava.weixin.service.MessageTypeRegister;
+import org.fkjava.weixin.domain.InMessage;
+import org.fkjava.weixin.service.MessageService;
+import org.fkjava.weixin.service.MessageTypeRegister;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,20 +18,19 @@ import org.springframework.web.bind.annotation.RestController;
 // Controller（控制器），其实就相当于是Servlet，但是Spring MVC把所有的Servlet相关API都屏蔽掉了！
 // 屏蔽的好处：不需要依赖Tomcat就可以实现单元测试。
 @RestController // 基于RESTful风格的WEB服务的控制器
- // 访问哪个路径的时候，被此控制器处理
+@RequestMapping("/yzk/wexin/reciver") // 访问哪个路径的时候，被此控制器处理
 public class MessageReceiverController {
 
 	// 自动从Spring的容器里面获取一个消息服务出来，用于处理转换后的消息。现在还未实现消息的处理。
 	// 能够自动根据接口和实现的关系，自动把合适类型的对象放进来。
-//	@Autowired
-//	private MessageService messageService;
+	@Autowired
+	private MessageService messageService;
 
 	private static final Logger LOG = LoggerFactory.getLogger(MessageReceiverController.class);
 
 	// 必须要有Handler方法才不会出现404
 	// Handler方法就是用来处理各种请求的操作、入口
-//	@GetMapping
-	@RequestMapping("/yzk/wexin/reciver")
+	@GetMapping
 	public String echo(//
 			@RequestParam("signature") String signature, //
 			@RequestParam("timestamp") String timestamp, //
@@ -75,13 +74,13 @@ public class MessageReceiverController {
 		type = type.substring(0, type.indexOf("]]></MsgType>"));
 
 		// 根据消息类型，找到对应的Java类型
-//		Class<? extends InMessage> cla = MessageTypeRegister.getClass(type);
-//
-//		// 使用JAXB的API完成消息转换
-//		InMessage inMessage = JAXB.unmarshal(xml, cla);
-//
-//		// 后面就调用业务逻辑层负责处理消息
-//		this.messageService.onMessage(inMessage);
+		Class<? extends InMessage> cla = MessageTypeRegister.getClass(type);
+
+		// 使用JAXB的API完成消息转换
+		InMessage inMessage = JAXB.unmarshal(xml, cla);
+
+		// 后面就调用业务逻辑层负责处理消息
+		this.messageService.onMessage(inMessage);
 
 		return "success";
 	}
