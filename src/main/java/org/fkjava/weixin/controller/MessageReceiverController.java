@@ -52,7 +52,7 @@ public class MessageReceiverController {
 			@RequestParam(value = "signature", required = false) String signature, //
 			@RequestParam(value = "timestamp", required = false) String timestamp, //
 			@RequestParam(value = "nonce", required = false) String nonce, //
-			// @RequestBody 表示请求体
+			// @RequestBody 表示请求体   
 			@RequestBody String xml//
 	) {
 		// 把收到的请求消息、请求参数全部打印出来
