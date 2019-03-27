@@ -7,5 +7,5 @@ spring.datasource:
    username: yzk
    password: 123456 
         
-server.port: 8098
-   
+server.port: 8090
+        
